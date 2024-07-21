@@ -10,13 +10,13 @@ router = FastAPI()
 logger = structlog.getLogger("router")
 
 
-@router.post("/vector_search/")
+@router.post("/search_by_vector/")
 async def search_by_vector(data: schemas.SearchVectorRequest):
     result = vector_engine.index.search(np.array([data.embedding]), data.n)
     return schemas.SearchResponse(company_ids=result[1][0])
 
 
-@router.post("/token_search/")
+@router.post("/search_by_token/")
 async def search_by_token(data: schemas.SearchTokensRequest):
     text = " ".join(data.tokens)
     embedding = tf_idf_engine.vectorizer.transform([text]).toarray()
